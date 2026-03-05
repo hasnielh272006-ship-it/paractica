@@ -1,0 +1,52 @@
+
+PRACTICA 1 - RSYNC
+
+sudo apt install rsync -y
+mkdir ~/carpeta_sync
+touch ~/carpeta_sync/archivo_{1..100}.txt
+ls ~/carpeta_sync | wc -l
+ssh-keygen
+ssh-copy-id jeremy@10.0.0.151
+ssh jeremy@10.0.0.151
+rsync -avz ~/carpeta_sync/ jeremy@10.0.0.151:~/carpeta_sync/
+ls ~/carpeta_sync | wc -l
+nano ~/sync.sh
+chmod +x ~/sync.sh
+crontab -e
+touch ~/carpeta_sync/archivo_nuevo_prueba.txt
+ls ~/carpeta_sync | grep prueba
+cat ~/sync.log
+
+
+PRACTICA 2 - CLUSTER HA HEARTBEAT
+
+sudo nano /etc/hosts
+ping vm2
+ping vm1
+sudo apt update
+sudo apt install heartbeat -y
+sudo nano /etc/ha.d/ha.cf
+sudo nano /etc/ha.d/authkeys
+sudo chmod 600 /etc/ha.d/authkeys
+sudo nano /etc/ha.d/haresources
+sudo systemctl start heartbeat
+sudo systemctl enable heartbeat
+sudo systemctl status heartbeat
+ip addr show enp0s3
+sudo shutdown now
+
+
+PRACTICA 3 - CLUSTER HA HTTP KEEPALIVED
+
+sudo apt install apache2 -y
+sudo systemctl enable apache2
+sudo systemctl start apache2
+echo '<h1>Server 1 - Jeremy - 10.0.0.150</h1>' | sudo tee /var/www/html/index.html
+echo '<h1>Server 2 - Jeremy - 10.0.0.151</h1>' | sudo tee /var/www/html/index.html
+sudo apt install keepalived -y
+sudo nano /etc/keepalived/keepalived.conf
+sudo systemctl enable keepalived
+sudo systemctl start keepalived
+sudo systemctl status keepalived
+ip addr show enp0s3
+sudo shutdown now
